@@ -58,7 +58,7 @@ class MarkdownLogger
     {
         $content = implode("\n\n", $this->content);
 
-        $filePath = $this->directory . '/' . $this->filename;
+        $filePath = $this->directory . '/' . $this->filename . '.md';
         
         if (!is_dir($this->directory)) {
             mkdir($this->directory, 0755, true);
