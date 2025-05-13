@@ -4,17 +4,11 @@ namespace GusVasconcelos\MarkdownLogger;
 
 class MarkdownLogger
 {
-    private string $directory;
+    private array $content;
 
-    private string $filename;
-    
-    private array $content = [];
-
-    public function __construct(string $directory, string $filename)
+    public function __construct() 
     {
-        $this->directory = rtrim($directory, '/');
-
-        $this->filename = $filename;
+        $this->content = [];
     }
 
     public function heading(string $text, int $level = 1): self
@@ -54,14 +48,18 @@ class MarkdownLogger
         return $this;
     }
 
-    public function build(): self
+    public function write(string $directory, string $filename): self
     {
+        $directory = rtrim($directory, '/');
+
+        $filename = $filename;
+
         $content = implode("\n\n", $this->content);
 
-        $filePath = $this->directory . '/' . $this->filename . '.md';
+        $filePath = $directory . '/' . $filename . '.md';
         
-        if (!is_dir($this->directory)) {
-            mkdir($this->directory, 0755, true);
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
         }
         
         file_put_contents($filePath, $content);

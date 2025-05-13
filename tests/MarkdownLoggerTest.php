@@ -20,6 +20,7 @@ class MarkdownLoggerTest extends TestCase
     {
         if (file_exists($this->tempDir)) {
             $files = glob($this->tempDir . '/*');
+
             foreach ($files as $file) {
                 unlink($file);
             }
@@ -30,14 +31,14 @@ class MarkdownLoggerTest extends TestCase
     
     public function testInitialization()
     {
-        $logger = new MarkdownLogger($this->tempDir, 'test.md');
+        $logger = new MarkdownLogger();
 
         $this->assertInstanceOf(MarkdownLogger::class, $logger);
     }
     
     public function testHeading()
     {
-        $logger = new MarkdownLogger($this->tempDir, 'test.md');
+        $logger = new MarkdownLogger();
 
         $logger->heading('Test Heading');
 
@@ -48,7 +49,7 @@ class MarkdownLoggerTest extends TestCase
     
     public function testHeadingWithLevel()
     {
-        $logger = new MarkdownLogger($this->tempDir, 'test.md');
+        $logger = new MarkdownLogger();
 
         $logger->heading('Test Heading', 3);
         
@@ -59,7 +60,7 @@ class MarkdownLoggerTest extends TestCase
     
     public function testParagraph()
     {
-        $logger = new MarkdownLogger($this->tempDir, 'test.md');
+        $logger = new MarkdownLogger();
 
         $logger->paragraph('Test paragraph content');
 
@@ -70,7 +71,7 @@ class MarkdownLoggerTest extends TestCase
     
     public function testHorizontalRule()
     {
-        $logger = new MarkdownLogger($this->tempDir, 'test.md');
+        $logger = new MarkdownLogger();
 
         $logger->horizontalRule();
 
@@ -81,7 +82,7 @@ class MarkdownLoggerTest extends TestCase
     
     public function testCodeBlock()
     {
-        $logger = new MarkdownLogger($this->tempDir, 'test.md');
+        $logger = new MarkdownLogger();
 
         $code = '{"name": "John Doe", "age": 30}';
 
@@ -94,7 +95,7 @@ class MarkdownLoggerTest extends TestCase
     
     public function testLink()
     {
-        $logger = new MarkdownLogger($this->tempDir, 'test.md');
+        $logger = new MarkdownLogger();
 
         $logger->link('https://example.com', 'Example');
 
@@ -105,7 +106,7 @@ class MarkdownLoggerTest extends TestCase
     
     public function testChainedMethods()
     {
-        $logger = (new MarkdownLogger($this->tempDir, 'test.md'))
+        $logger = (new MarkdownLogger())
             ->heading('Test Document')
             ->paragraph('This is a test paragraph')
             ->horizontalRule()
@@ -125,18 +126,18 @@ class MarkdownLoggerTest extends TestCase
         $this->assertStringContainsString('[Example Site](https://example.com)', $content);
     }
     
-    public function testBuildMethod()
+    public function testWriteMethod()
     {
-        $filename = 'build-test.md';
+        $filename = 'build-test';
 
-        $logger = (new MarkdownLogger($this->tempDir, $filename))
+        $logger = (new MarkdownLogger())
             ->heading('Build Test')
             ->paragraph('Testing build method')
-            ->build();
+            ->write($this->tempDir, $filename);
             
-        $this->assertFileExists($this->tempDir . '/' . $filename);
+        $this->assertFileExists($this->tempDir . '/' . $filename . '.md');
 
-        $fileContent = file_get_contents($this->tempDir . '/' . $filename);
+        $fileContent = file_get_contents($this->tempDir . '/' . $filename . '.md');
 
         $this->assertStringContainsString('# Build Test', $fileContent);
 
@@ -145,12 +146,12 @@ class MarkdownLoggerTest extends TestCase
     
     public function testGetContent()
     {
-        $logger = (new MarkdownLogger($this->tempDir, 'test.md'))
+        $logger = (new MarkdownLogger())
             ->heading('Content Test')
             ->paragraph('Testing getContent method');
             
         $content = $logger->getContent();
-        
+
         $this->assertIsString($content);
 
         $this->assertStringContainsString('# Content Test', $content);
