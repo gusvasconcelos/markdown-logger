@@ -17,8 +17,8 @@ composer require gusvasconcelos/markdown-logger
 ```php
 use GusVasconcelos\MarkdownLogger\MarkdownLogger;
 
-// Initialize the logger with directory and filename
-$logger = new MarkdownLogger(__DIR__, "example.md");
+// Initialize the logger
+$logger = new MarkdownLogger();
 
 // Create markdown content
 $logger
@@ -27,19 +27,19 @@ $logger
     ->horizontalRule()
     ->codeBlock('{"name":"John","age":30,"email":"john@example.com"}', "json")
     ->link('https://api.example.com', 'API Documentation')
-    ->build(); // Write to file
+    ->write(__DIR__, "example.md"); // Write to file
 ```
 
 ### Fluent Interface
 All methods return the logger instance, allowing for method chaining:
 ```php
-$logger = (new MarkdownLogger(__DIR__, "log.md"))
+$logger = (new MarkdownLogger())
     ->heading('System Log', 2)
     ->paragraph('Timestamp: ' . date('Y-m-d H:i:s'))
     ->horizontalRule()
     ->codeBlock($errorDetails, 'php')
     ->link('https://support.example.com', 'Get Support')
-    ->build();
+    ->write(__DIR__, "example.md");
 ```
 
 ### Available Methods
@@ -75,10 +75,22 @@ Adds a link with the specified URL and text.
 $logger->link('https://example.com', 'Example Site'); // [Example Site](https://example.com)
 ```
 
-#### build()
+#### orderedList(array \$items)
+Adds an ordered list with the specified items.
+```php
+$logger->orderedList(['Item 1', 'Item 2', 'Item 3']); // 1. Item 1 2. Item 2 3. Item 3
+```
+
+#### unorderedList(array \$items)
+Adds an unordered list with the specified items.
+```php
+$logger->unorderedList(['Item 1', 'Item 2', 'Item 3']); // - Item 1 - Item 2 - Item 3
+```
+
+#### write(string \$directory, string \$filename)
 Writes the markdown content to the file.
 ```php
-$logger->build(); // Writes to file
+$logger->write(__DIR__, "example.md"); // Writes to file
 ```
 
 #### getContent()
