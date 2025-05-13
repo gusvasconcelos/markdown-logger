@@ -1,6 +1,9 @@
 {
     "name": "gusvasconcelos/markdown-logger",
-    "description": "Make a markdown for logger",
+    "description": "A PHP library for generating structured logs in Markdown format with support for various log levels and customization options",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "GusVasconcelos\\MarkdownLogger\\": "src/"
