@@ -48,6 +48,23 @@ class MarkdownLogger
         return $this;
     }
 
+    public function orderedList(array $items): self
+    {
+        $this->content[] = implode(
+            "\n", 
+            array_map(fn($item, $index) => "$index. $item", $items, range(1, count($items)))
+        );
+
+        return $this;
+    }
+
+    public function unorderedList(array $items): self
+    {
+        $this->content[] = implode("\n", array_map(fn($item) => "- $item", $items));
+
+        return $this;
+    }
+
     public function write(string $directory, string $filename): self
     {
         $directory = rtrim($directory, '/');

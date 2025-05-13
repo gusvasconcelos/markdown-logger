@@ -103,6 +103,32 @@ class MarkdownLoggerTest extends TestCase
         
         $this->assertStringContainsString('[Example](https://example.com)', $content);
     }
+
+    public function testOrderedList()
+    {
+        $logger = new MarkdownLogger();
+
+        $logger->orderedList(['Item 1', 'Item 2', 'Item 3']);
+
+        $content = $logger->getContent();
+
+        $this->assertStringContainsString('1. Item 1', $content);
+        $this->assertStringContainsString('2. Item 2', $content);
+        $this->assertStringContainsString('3. Item 3', $content);
+    }
+
+    public function testUnorderedList()
+    {
+        $logger = new MarkdownLogger();
+
+        $logger->unorderedList(['Item 1', 'Item 2', 'Item 3']);
+
+        $content = $logger->getContent();
+
+        $this->assertStringContainsString('- Item 1', $content);
+        $this->assertStringContainsString('- Item 2', $content);
+        $this->assertStringContainsString('- Item 3', $content);
+    }
     
     public function testChainedMethods()
     {
