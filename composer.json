@@ -1,0 +1,29 @@
+{
+    "name": "gusvasconcelos/markdown-logger",
+    "description": "Make a markdown for logger",
+    "autoload": {
+        "psr-4": {
+            "GusVasconcelos\\MarkdownLogger\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\GusVasconcelos\\MarkdownLogger\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gustavo Vasconcelos",
+            "email": "gusvasconcelos@proton.me"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}
