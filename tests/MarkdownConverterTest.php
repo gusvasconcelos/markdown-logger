@@ -1,21 +1,21 @@
 <?php
 
-namespace Tests\GusVasconcelos\MarkdownLogger;
+namespace Tests\GusVasconcelos\MarkdownConverter;
 
-use GusVasconcelos\MarkdownLogger\MarkdownLogger;
+use GusVasconcelos\MarkdownConverter\MarkdownConverter;
 use PHPUnit\Framework\TestCase;
 
-class MarkdownLoggerTest extends TestCase
+class MarkdownConverterTest extends TestCase
 {
     private $tempDir;
-    
+
     protected function setUp(): void
     {
-        $this->tempDir = sys_get_temp_dir() . '/markdown-logger-test-' . uniqid();
+        $this->tempDir = sys_get_temp_dir() . '/markdown-converter-test-' . uniqid();
 
         mkdir($this->tempDir, 0777, true);
     }
-    
+
     protected function tearDown(): void
     {
         if (file_exists($this->tempDir)) {
@@ -28,89 +28,89 @@ class MarkdownLoggerTest extends TestCase
             rmdir($this->tempDir);
         }
     }
-    
+
     public function testInitialization()
     {
-        $logger = new MarkdownLogger();
+        $converter = new MarkdownConverter();
 
-        $this->assertInstanceOf(MarkdownLogger::class, $logger);
+        $this->assertInstanceOf(MarkdownConverter::class, $converter);
     }
-    
+
     public function testHeading()
     {
-        $logger = new MarkdownLogger();
+        $converter = new MarkdownConverter();
 
-        $logger->heading('Test Heading');
+        $converter->heading('Test Heading');
 
-        $content = $logger->getContent();
-        
+        $content = $converter->getContent();
+
         $this->assertStringContainsString('# Test Heading', $content);
     }
-    
+
     public function testHeadingWithLevel()
     {
-        $logger = new MarkdownLogger();
+        $converter = new MarkdownConverter();
 
-        $logger->heading('Test Heading', 3);
-        
-        $content = $logger->getContent();
-        
+        $converter->heading('Test Heading', 3);
+
+        $content = $converter->getContent();
+
         $this->assertStringContainsString('### Test Heading', $content);
     }
-    
+
     public function testParagraph()
     {
-        $logger = new MarkdownLogger();
+        $converter = new MarkdownConverter();
 
-        $logger->paragraph('Test paragraph content');
+        $converter->paragraph('Test paragraph content');
 
-        $content = $logger->getContent();
-        
+        $content = $converter->getContent();
+
         $this->assertStringContainsString('Test paragraph content', $content);
     }
-    
+
     public function testHorizontalRule()
     {
-        $logger = new MarkdownLogger();
+        $converter = new MarkdownConverter();
 
-        $logger->horizontalRule();
+        $converter->horizontalRule();
 
-        $content = $logger->getContent();
-        
+        $content = $converter->getContent();
+
         $this->assertStringContainsString('---', $content);
     }
-    
+
     public function testCodeBlock()
     {
-        $logger = new MarkdownLogger();
+        $converter = new MarkdownConverter();
 
         $code = '{"name": "John Doe", "age": 30}';
 
-        $logger->codeBlock($code, 'json');
+        $converter->codeBlock($code, 'json');
 
-        $content = $logger->getContent();
-        
+        $content = $converter->getContent();
+
         $this->assertStringContainsString("```json\n{\"name\": \"John Doe\", \"age\": 30}\n```", $content);
     }
-    
+
     public function testLink()
     {
-        $logger = new MarkdownLogger();
+        $converter = new MarkdownConverter();
 
-        $logger->link('https://example.com', 'Example');
+        $converter->link('https://example.com', 'Example');
 
-        $content = $logger->getContent();
-        
+        $content = $converter->getContent();
+
         $this->assertStringContainsString('[Example](https://example.com)', $content);
     }
 
     public function testOrderedList()
     {
-        $logger = new MarkdownLogger();
+        $converter = new MarkdownConverter();
 
-        $logger->orderedList(['Item 1', 'Item 2', 'Item 3']);
+        $converter->orderedList(['Item 1', 'Item 2', 'Item 3']);
 
-        $content = $logger->getContent();
+        $content = $converter->getContent();
 
         $this->assertStringContainsString('1. Item 1', $content);
         $this->assertStringContainsString('2. Item 2', $content);
@@ -119,28 +119,28 @@ class MarkdownLoggerTest extends TestCase
 
     public function testUnorderedList()
     {
-        $logger = new MarkdownLogger();
+        $converter = new MarkdownConverter();
 
-        $logger->unorderedList(['Item 1', 'Item 2', 'Item 3']);
+        $converter->unorderedList(['Item 1', 'Item 2', 'Item 3']);
 
-        $content = $logger->getContent();
+        $content = $converter->getContent();
 
         $this->assertStringContainsString('- Item 1', $content);
         $this->assertStringContainsString('- Item 2', $content);
         $this->assertStringContainsString('- Item 3', $content);
     }
-    
+
     public function testChainedMethods()
     {
-        $logger = (new MarkdownLogger())
+        $converter = (new MarkdownConverter())
             ->heading('Test Document')
             ->paragraph('This is a test paragraph')
             ->horizontalRule()
             ->codeBlock('console.log("Hello");', 'javascript')
             ->link('https://example.com', 'Example Site');
-            
-        $content = $logger->getContent();
-        
+
+        $content = $converter->getContent();
+
         $this->assertStringContainsString('# Test Document', $content);
 
         $this->assertStringContainsString('This is a test paragraph', $content);
@@ -151,16 +151,16 @@ class MarkdownLoggerTest extends TestCase
 
         $this->assertStringContainsString('[Example Site](https://example.com)', $content);
     }
-    
+
     public function testWriteMethod()
     {
         $filename = 'build-test';
 
-        $logger = (new MarkdownLogger())
+        $converter = (new MarkdownConverter())
             ->heading('Build Test')
             ->paragraph('Testing build method')
             ->write($this->tempDir, $filename);
-            
+
         $this->assertFileExists($this->tempDir . '/' . $filename . '.md');
 
         $fileContent = file_get_contents($this->tempDir . '/' . $filename . '.md');
@@ -169,14 +169,14 @@ class MarkdownLoggerTest extends TestCase
 
         $this->assertStringContainsString('Testing build method', $fileContent);
     }
-    
+
     public function testGetContent()
     {
-        $logger = (new MarkdownLogger())
+        $converter = (new MarkdownConverter())
             ->heading('Content Test')
             ->paragraph('Testing getContent method');
-            
-        $content = $logger->getContent();
+
+        $content = $converter->getContent();
 
         $this->assertIsString($content);
 

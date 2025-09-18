@@ -4,7 +4,7 @@
          verbose="true"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="MarkdownLogger Test Suite">
+        <testsuite name="MarkdownConverter Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

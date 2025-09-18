@@ -1,8 +1,8 @@
 <?php
 
-namespace GusVasconcelos\MarkdownLogger;
+namespace GusVasconcelos\MarkdownConverter;
 
-class MarkdownLogger
+class MarkdownConverter
 {
     private array $content;
 
@@ -15,7 +15,7 @@ class MarkdownLogger
     {
         $prefix = str_repeat('#', $level);
 
-        $this->content[] = "$prefix $text";
+        $this->content[] = "{$prefix} {$text}";
 
         return $this;
     }
@@ -36,14 +36,14 @@ class MarkdownLogger
 
     public function codeBlock(string $code, string $language = ""): self
     {
-        $this->content[] = "```$language\n$code\n```";
+        $this->content[] = "```{$language}\n{$code}\n```";
 
         return $this;
     }
 
     public function link(string $url, string $text): self
     {
-        $this->content[] = "[$text]($url)";
+        $this->content[] = "[{$text}]({$url})";
 
         return $this;
     }
@@ -51,8 +51,8 @@ class MarkdownLogger
     public function orderedList(array $items): self
     {
         $this->content[] = implode(
-            "\n", 
-            array_map(fn($item, $index) => "$index. $item", $items, range(1, count($items)))
+            PHP_EOL, 
+            array_map(fn($item, $index) => "{$index}. {$item}", $items, range(1, count($items)))
         );
 
         return $this;
@@ -60,7 +60,7 @@ class MarkdownLogger
 
     public function unorderedList(array $items): self
     {
-        $this->content[] = implode("\n", array_map(fn($item) => "- $item", $items));
+        $this->content[] = implode(PHP_EOL, array_map(fn($item) => "- {$item}", $items));
 
         return $this;
     }
@@ -69,9 +69,7 @@ class MarkdownLogger
     {
         $directory = rtrim($directory, '/');
 
-        $filename = $filename;
-
-        $content = implode("\n\n", $this->content);
+        $content = implode(PHP_EOL, $this->content);
 
         $filePath = $directory . '/' . $filename . '.md';
         
@@ -86,6 +84,6 @@ class MarkdownLogger
     
     public function getContent(): string
     {
-        return implode("\n\n", $this->content);
+        return implode(PHP_EOL, $this->content);
     }
 }

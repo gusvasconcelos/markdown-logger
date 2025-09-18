@@ -1,11 +1,11 @@
-# Markdown Logger
-A simple and fluent PHP library for creating Markdown files for logging purposes.
+# Markdown Converter
+A simple and fluent PHP library for creating Markdown files for content generation purposes.
 
 ## Installation
 Install the package via Composer:
 
 ```bash
-composer require gusvasconcelos/markdown-logger
+composer require gusvasconcelos/markdown-converter
 ```
 
 ## Requirements
@@ -15,13 +15,13 @@ composer require gusvasconcelos/markdown-logger
 ## Usage
 
 ```php
-use GusVasconcelos\MarkdownLogger\MarkdownLogger;
+use GusVasconcelos\MarkdownConverter\MarkdownConverter;
 
-// Initialize the logger
-$logger = new MarkdownLogger();
+// Initialize the converter
+$converter = new MarkdownConverter();
 
 // Create markdown content
-$logger
+$converter
     ->heading('API Request Log')
     ->paragraph('Request ID: 1234567890')
     ->horizontalRule()
@@ -31,9 +31,9 @@ $logger
 ```
 
 ### Fluent Interface
-All methods return the logger instance, allowing for method chaining:
+All methods return the converter instance, allowing for method chaining:
 ```php
-$logger = (new MarkdownLogger())
+$converter = (new MarkdownConverter())
     ->heading('System Log', 2)
     ->paragraph('Timestamp: ' . date('Y-m-d H:i:s'))
     ->horizontalRule()
@@ -47,62 +47,62 @@ $logger = (new MarkdownLogger())
 #### heading(string \$text, int \$level = 1)
 Creates a heading with the specified text and level (1-6).
 ```php
-$logger->heading('Main Title'); // # Main Title
-$logger->heading('Subtitle', 2); // ## Subtitle
+$converter->heading('Main Title'); // # Main Title
+$converter->heading('Subtitle', 2); // ## Subtitle
 ```
 
 #### paragraph(string \$text)
 Adds a paragraph with the specified text.
 ```php
-$logger->paragraph('This is a paragraph.'); // This is a paragraph.
+$converter->paragraph('This is a paragraph.'); // This is a paragraph.
 ```
 
 #### horizontalRule()
 Adds a horizontal rule (divider).
 ```php
-$logger->horizontalRule(); // ---
+$converter->horizontalRule(); // ---
 ```
 
 #### codeBlock(string \$code, string \$language = null)
 Adds a code block with the specified code and optional language.
 ```php
-$logger->codeBlock('{"name":"John","age":30, "email":"john@example.com"}', 'json'); // ```json {"name":"John","age":30, "email":"john@example.com"}```
+$converter->codeBlock('{"name":"John","age":30, "email":"john@example.com"}', 'json'); // ```json {"name":"John","age":30, "email":"john@example.com"}```
 ```
 
 #### link(string \$url, string \$text)
 Adds a link with the specified URL and text.
 ```php
-$logger->link('https://example.com', 'Example Site'); // [Example Site](https://example.com)
+$converter->link('https://example.com', 'Example Site'); // [Example Site](https://example.com)
 ```
 
 #### orderedList(array \$items)
 Adds an ordered list with the specified items.
 ```php
-$logger->orderedList(['Item 1', 'Item 2', 'Item 3']); // 1. Item 1 2. Item 2 3. Item 3
+$converter->orderedList(['Item 1', 'Item 2', 'Item 3']); // 1. Item 1 2. Item 2 3. Item 3
 ```
 
 #### unorderedList(array \$items)
 Adds an unordered list with the specified items.
 ```php
-$logger->unorderedList(['Item 1', 'Item 2', 'Item 3']); // - Item 1 - Item 2 - Item 3
+$converter->unorderedList(['Item 1', 'Item 2', 'Item 3']); // - Item 1 - Item 2 - Item 3
 ```
 
 #### write(string \$directory, string \$filename)
 Writes the markdown content to the file.
 ```php
-$logger->write(__DIR__, "example.md"); // Writes to file
+$converter->write(__DIR__, "example.md"); // Writes to file
 ```
 
 #### getContent()
 Returns the markdown content as a string.
 ```php
-$content = $logger->getContent(); // Returns the markdown content
+$content = $converter->getContent(); // Returns the markdown content
 ```
 
 ## Use Cases
-- Logging API requests and responses
-- Application logs
-- Debugging complex data structures
+- Generating API documentation
+- Creating structured content
+- Converting data structures to readable format
 
 ## Testing
 
