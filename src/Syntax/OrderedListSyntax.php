@@ -2,9 +2,7 @@
 
 namespace GusVasconcelos\MarkdownConverter\Syntax;
 
-use Stringable;
-
-class OrderedListSyntax implements MarkdownSyntaxInterface, Stringable
+class OrderedListSyntax implements MarkdownSyntaxInterface
 {
     private array $items;
 

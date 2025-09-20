@@ -18,9 +18,8 @@ use GusVasconcelos\MarkdownConverter\Syntax\{
     HorizontalRuleSyntax,
     MarkdownSyntaxInterface,
 };
-use Stringable;
 
-class MarkdownConverter implements Stringable
+class MarkdownConverter
 {
     private MarkdownSyntaxCollection $elements;
 

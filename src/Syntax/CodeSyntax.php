@@ -2,9 +2,7 @@
 
 namespace GusVasconcelos\MarkdownConverter\Syntax;
 
-use Stringable;
-
-class CodeSyntax implements MarkdownSyntaxInterface, Stringable
+class CodeSyntax implements MarkdownSyntaxInterface
 {
     private string $code;
 

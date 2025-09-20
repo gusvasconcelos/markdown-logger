@@ -9,4 +9,10 @@ interface MarkdownSyntaxInterface
      * @return string
      */
     public function getType(): string;
+
+    /**
+     * Retorna o elemento Markdown como string
+     * @return string
+     */
+    public function __toString(): string;
 }

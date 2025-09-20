@@ -2,9 +2,7 @@
 
 namespace GusVasconcelos\MarkdownConverter\Syntax;
 
-use Stringable;
-
-class ImageSyntax implements MarkdownSyntaxInterface, Stringable
+class ImageSyntax implements MarkdownSyntaxInterface
 {
     private string $url;
 

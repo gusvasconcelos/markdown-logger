@@ -2,9 +2,7 @@
 
 namespace GusVasconcelos\MarkdownConverter\Syntax;
 
-use Stringable;
-
-class HorizontalRuleSyntax implements MarkdownSyntaxInterface, Stringable
+class HorizontalRuleSyntax implements MarkdownSyntaxInterface
 {
     public function getType(): string
     {

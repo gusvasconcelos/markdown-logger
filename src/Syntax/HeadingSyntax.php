@@ -2,9 +2,7 @@
 
 namespace GusVasconcelos\MarkdownConverter\Syntax;
 
-use Stringable;
-
-class HeadingSyntax implements MarkdownSyntaxInterface, Stringable
+class HeadingSyntax implements MarkdownSyntaxInterface
 {
     private string $text;
 

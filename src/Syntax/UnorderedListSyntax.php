@@ -2,9 +2,7 @@
 
 namespace GusVasconcelos\MarkdownConverter\Syntax;
 
-use Stringable;
-
-class UnorderedListSyntax implements MarkdownSyntaxInterface, Stringable
+class UnorderedListSyntax implements MarkdownSyntaxInterface
 {
     private array $items;
 

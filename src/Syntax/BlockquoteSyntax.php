@@ -2,9 +2,7 @@
 
 namespace GusVasconcelos\MarkdownConverter\Syntax;
 
-use Stringable;
-
-class BlockquoteSyntax implements MarkdownSyntaxInterface, Stringable
+class BlockquoteSyntax implements MarkdownSyntaxInterface
 {
     private string $text;
 

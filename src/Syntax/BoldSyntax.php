@@ -2,9 +2,7 @@
 
 namespace GusVasconcelos\MarkdownConverter\Syntax;
 
-use Stringable;
-
-class BoldSyntax implements MarkdownSyntaxInterface, Stringable
+class BoldSyntax implements MarkdownSyntaxInterface
 {
     private string $text;
 
