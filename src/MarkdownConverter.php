@@ -2,74 +2,269 @@
 
 namespace GusVasconcelos\MarkdownConverter;
 
-class MarkdownConverter
+use GusVasconcelos\MarkdownConverter\Syntax\{
+    BoldSyntax,
+    CodeSyntax,
+    LinkSyntax,
+    EmojiSyntax,
+    ImageSyntax,
+    ItalicSyntax,
+    HeadingSyntax,
+    CodeBlockSyntax,
+    ParagraphSyntax,
+    BlockquoteSyntax,
+    OrderedListSyntax,
+    UnorderedListSyntax,
+    HorizontalRuleSyntax,
+    MarkdownSyntaxInterface,
+};
+use Stringable;
+
+class MarkdownConverter implements Stringable
 {
-    private array $content;
+    private MarkdownSyntaxCollection $elements;
 
     public function __construct() 
     {
-        $this->content = [];
+        $this->elements = new MarkdownSyntaxCollection();
     }
 
+    /**
+     * Add a heading to the content
+     * @param string $text
+     * @param int $level
+     * @return self
+     */
     public function heading(string $text, int $level = 1): self
     {
-        $prefix = str_repeat('#', $level);
-
-        $this->content[] = "{$prefix} {$text}";
+        $this->elements->add(new HeadingSyntax($text, $level));
 
         return $this;
     }
 
+    /**
+     * Add a horizontal rule to the content
+     * @return self
+     */
     public function horizontalRule(): self
     {
-        $this->content[] = PHP_EOL . "---" . PHP_EOL;
+        $this->elements->add(new HorizontalRuleSyntax());
 
         return $this;
     }
 
+    /**
+     * Add a paragraph to the content
+     * @param string $text
+     * @return self
+     */
     public function paragraph(string $text): self
     {
-        $this->content[] = $text;
+        $this->elements->add(new ParagraphSyntax($text));
 
         return $this;
     }
 
+    /**
+     * Add a code block to the content
+     * @param string $code
+     * @param string $language
+     * @return self
+     */
     public function codeBlock(string $code, string $language = ""): self
     {
-        $this->content[] = "```{$language}\n{$code}\n```";
+        $this->elements->add(new CodeBlockSyntax($code, $language));
 
         return $this;
     }
 
-    public function link(string $url, string $text): self
+    /**
+     * Add a link to the content
+     * @param string $url
+     * @param string $text
+     * @param string|null $title
+     * @return self
+     */
+    public function link(string $url, string $text, ?string $title = null): self
     {
-        $this->content[] = "[{$text}]({$url})";
+        $this->elements->add(new LinkSyntax($url, $text, $title));
 
         return $this;
     }
 
+    /**
+     * Add an ordered list to the content
+     * @param array $items
+     * @return self
+     */
     public function orderedList(array $items): self
     {
-        $this->content[] = implode(
-            PHP_EOL, 
-            array_map(fn($item, $index) => "{$index}. {$item}", $items, range(1, count($items)))
-        );
+        $this->elements->add(new OrderedListSyntax($items));
 
         return $this;
     }
 
+    /**
+     * Add an unordered list to the content
+     * @param array $items
+     * @return self
+     */
     public function unorderedList(array $items): self
     {
-        $this->content[] = implode(PHP_EOL, array_map(fn($item) => "- {$item}", $items));
+        $this->elements->add(new UnorderedListSyntax($items));
 
         return $this;
     }
 
+    /**
+     * Add bold text to the content
+     * @param string $text
+     * @return self
+     */
+    public function bold(string $text): self
+    {
+        $this->elements->add(new BoldSyntax($text));
+
+        return $this;
+    }
+
+    /**
+     * Add italic text to the content
+     * @param string $text
+     * @return self
+     */
+    public function italic(string $text): self
+    {
+        $this->elements->add(new ItalicSyntax($text));
+
+        return $this;
+    }
+
+    /**
+     * Add a blockquote to the content
+     * @param string $text
+     * @return self
+     */
+    public function blockquote(string $text): self
+    {
+        $this->elements->add(new BlockquoteSyntax($text));
+
+        return $this;
+    }
+
+    /**
+     * Add an image to the content
+     * @param string $url
+     * @param string $altText
+     * @param string|null $title
+     * @return self
+     */
+    public function image(string $url, string $altText, ?string $title = null): self
+    {
+        $this->elements->add(new ImageSyntax($url, $altText, $title));
+
+        return $this;
+    }
+
+    /**
+     * Add inline code to the content
+     * @param string $code
+     * @return self
+     */
+    public function code(string $code): self
+    {
+        $this->elements->add(new CodeSyntax($code));
+
+        return $this;
+    }
+
+    /**
+     * Add an emoji to the content
+     * @param string $emoji
+     * @return self
+     */
+    public function emoji(string $emoji): self
+    {
+        $this->elements->add(new EmojiSyntax($emoji));
+
+        return $this;
+    }
+
+    /**
+     * Remove an element by position
+     * @param int $position
+     * @return self
+     */
+    public function removeAt(int $position): self
+    {
+        $this->elements->removeAt($position);
+
+        return $this;
+    }
+
+    /**
+     * Get an element by position
+     * @param int $position
+     * @return MarkdownSyntaxInterface|null
+     */
+    public function get(int $position): ?MarkdownSyntaxInterface
+    {
+        return $this->elements->get($position);
+    }
+
+    /**
+     * Replace an element at the specified position
+     * @param int $position
+     * @param MarkdownSyntaxInterface $element
+     * @return self
+     */
+    public function replace(int $position, MarkdownSyntaxInterface $element): self
+    {
+        $this->elements->replace($position, $element);
+
+        return $this;
+    }
+
+    /**
+     * Return the collection of elements
+     * @return MarkdownSyntaxCollection
+     */
+    public function all(): MarkdownSyntaxCollection
+    {
+        return $this->elements;
+    }
+
+    /**
+     * Clear all elements
+     * @return self
+     */
+    public function clear(): self
+    {
+        $this->elements->clear();
+
+        return $this;
+    }
+
+    /**
+     * Count the number of elements in the collection
+     * @return int
+     */
+    public function count(): int
+    {
+        return $this->elements->count();
+    }
+
+    /**
+     * Write the content to a file
+     * @param string $directory
+     * @param string $filename
+     * @return self
+     */
     public function write(string $directory, string $filename): self
     {
         $directory = rtrim($directory, '/');
 
-        $content = implode(PHP_EOL, $this->content);
+        $content = (string) $this->elements;
 
         $filePath = $directory . '/' . $filename . '.md';
         
@@ -82,8 +277,12 @@ class MarkdownConverter
         return $this;
     }
     
-    public function getContent(): string
+    /**
+     * Return the content as string
+     * @return string
+     */
+    public function __toString(): string
     {
-        return implode(PHP_EOL, $this->content);
+        return (string) $this->elements;
     }
 }
